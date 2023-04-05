@@ -1,0 +1,86 @@
+<%- include('../partials/header') %><br>
+<a href="/flights/<%= flight._id %>/tickets/new">ADD TICKET</a>
+
+<section id="show-page">
+  <div>Airline: </div>
+  <div><%= flight.airline %></div>
+  <div>Airport: </div>
+  <div><%= flight.airport %></div>
+  <div>Flight Number: </div>
+  <div><%= flight.flightNo %></div>
+  <div>Departs: </div>
+  <div><%= flight.departs %></div>
+</section>
+
+<br><br>
+<h2>Arrival Details</h2>
+<form id="add-review-form" method="POST"
+  action="/flights/<%= flight._id %>/arrivals">
+  <label>Airport:
+    <select name="airport">
+        <option value="DEN">DEN</option>
+        <option value="AUS">AUS</option>
+        <option value="DFW">DFW</option>
+        <option value="LAX">LAX</option>
+        <option value="SAN">SAN</option>
+      </select>
+  </label><br>
+  <label>Arrival Time:</label>
+  <label name="arrival">
+    <input type="datetime-local" name="arrival">
+  </label>
+  <input type="submit" value="Add Details">
+</form>
+
+<% function compareTime (flA, flB) { %>
+    <% if (flA.arrival < flB.arrival) { %>
+    <%   return -1 %>
+    <% } if (flA.arrival > flB.arrival) { %>
+    <%   return 1 %>
+    <% } return 0 };%>
+    
+<% flight.destinations.sort(compareTime) %>
+
+<% if (flight.destinations.length) { %>
+    <table>
+      <thead>
+        <tr>
+          <th>Airport</th>
+          <th>Arrival Time:</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% flight.destinations.forEach(function(f) { %>
+          <tr>
+            <td><%= f.airport %></td>
+            <td><%= f.arrival %></td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  <% } else { %>
+    <h5>No Details Yet</h5>
+<% } %>
+
+<% if (tickets.length) { %>
+    <table>
+      <thead>
+        <tr>
+          <th>Seat</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% tickets.forEach(function(t) { %>
+          <tr>
+            <td><%= t.seat %></td>
+            <td><%= t.price %></td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  <% } else { %>
+    <h5>No Tickets Yet</h5>
+<% } %>
+
+<%- include('../partials/footer') %>
